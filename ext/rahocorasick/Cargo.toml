@@ -1,0 +1,12 @@
+[package]
+edition = "2021"
+name = "rahocorasick"
+version = "0.1.0"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+aho-corasick = "0.7"
+magnus = "0.4"
