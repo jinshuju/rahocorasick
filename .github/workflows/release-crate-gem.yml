@@ -1,0 +1,107 @@
+name: "Release Crate & RubyGem"
+on:
+  push:
+    tags:
+      - "v*"
+    branches:
+      - release-gem
+jobs:
+  build:
+    name: Build compile gems
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby-platform:
+          - arm64-darwin
+          - x86_64-darwin
+          - x86_64-linux
+          - aarch64-linux
+          - x86_64-linux-musl
+    steps:
+      - uses: actions/checkout@v3
+      - uses: oxidize-rb/actions/setup-ruby-and-rust@main
+        with:
+          ruby-version: "3.2"
+          bundler-cache: true
+          cargo-cache: true
+          cargo-vendor: false
+
+      - name: Touch Rakefile
+        run: |
+          touch Rakefile
+
+      - uses: oxidize-rb/cross-gem-action@main
+        with:
+          platform: ${{ matrix.ruby-platform }}
+          directory: ./
+          ruby-versions: "3.2, 3.1" # optional
+          setup: cd rahocorasick/ && bundle install
+
+  build_source:
+    name: Build source gem
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: oxidize-rb/actions/setup-ruby-and-rust@main
+        with:
+          ruby-version: "3.2"
+          bundler-cache: false
+          cargo-cache: true
+          cargo-vendor: true
+
+      - name: Build gem
+        run: |
+          cd rahocorasick/
+          gem rahocorasick.gemspec
+          mkdir -p pkg/
+          mv *.gem pkg/
+
+      - name: Upload Gem
+        uses: actions/upload-artifact@v3
+        with:
+          name: cross-gem
+          path: autocorrect-rb/pkg/
+
+  publish:
+    name: Publish cross gems
+    runs-on: ubuntu-latest
+    needs:
+      - build
+      - build_source
+    steps:
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2"
+          bundler-cache: true
+      - uses: actions/download-artifact@v3
+        with:
+          name: cross-gem
+          path: pkg/
+
+      - name: Display structure of built gems
+        run: ls -R
+        working-directory: pkg/
+
+      - name: Publish to RubyGem
+        env:
+          RUBYGEM_TOKEN: "${{secrets.RUBYGEM_TOKEN}}"
+        working-directory: pkg/
+        run: |
+          mkdir -p $HOME/.gem
+          touch $HOME/.gem/credentials
+          chmod 0600 $HOME/.gem/credentials
+          printf -- "---\n:rubygems_api_key: ${RUBYGEM_TOKEN}\n" > $HOME/.gem/credentials
+          for filename in autocorrect-rb/**/*.gem; do
+            echo $filename
+            gem push $filename
+          done
+          for filename in *.gem; do
+            echo $filename
+            gem push $filename
+          done
+
+      - name: Install RubyGem & Test Run
+        run: |
+          gem install autocorrect-rb --verbose
+          ruby -e "require 'autocorrect-rb'; puts AutoCorrect.format('Foolish man kicks football in bar');"
