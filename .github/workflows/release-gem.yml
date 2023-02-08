@@ -17,7 +17,6 @@ jobs:
           - x86_64-darwin
           - x86_64-linux
           - aarch64-linux
-          - x86_64-linux-musl
     steps:
       - uses: actions/checkout@v3
       - uses: oxidize-rb/actions/setup-ruby-and-rust@main
@@ -36,7 +35,7 @@ jobs:
           platform: ${{ matrix.ruby-platform }}
           directory: ./
           ruby-versions: "3.2, 3.1" # optional
-          setup: cd rahocorasick/ && bundle install
+          setup: bundle install
 
   build_source:
     name: Build source gem
@@ -52,7 +51,6 @@ jobs:
 
       - name: Build gem
         run: |
-          cd rahocorasick/
           gem rahocorasick.gemspec
           mkdir -p pkg/
           mv *.gem pkg/
@@ -61,7 +59,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: cross-gem
-          path: autocorrect-rb/pkg/
+          path: pkg/
 
   publish:
     name: Publish cross gems
@@ -92,7 +90,7 @@ jobs:
           touch $HOME/.gem/credentials
           chmod 0600 $HOME/.gem/credentials
           printf -- "---\n:rubygems_api_key: ${RUBYGEM_TOKEN}\n" > $HOME/.gem/credentials
-          for filename in autocorrect-rb/**/*.gem; do
+          for filename in ./**/*.gem; do
             echo $filename
             gem push $filename
           done
@@ -103,5 +101,5 @@ jobs:
 
       - name: Install RubyGem & Test Run
         run: |
-          gem install autocorrect-rb --verbose
-          ruby -e "require 'autocorrect-rb'; puts AutoCorrect.format('Foolish man kicks football in bar');"
+          gem install rahocorasick --verbose
+          ruby -e "require 'rahocorasick'; puts RAhoC.new ['foo', 'bar'].lookup('Foolish man kicks football in bar');"
