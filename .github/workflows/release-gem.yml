@@ -100,4 +100,4 @@ jobs:
       - name: Install RubyGem & Test Run
         run: |
           gem install rahocorasick --verbose
-          ruby -rrahocorasick -e "puts RAhoC.new(['foo', 'bar']).lookup('Foolish man kicks football in bar');"
+          ruby -rrahocorasick -e "puts RAhoC.new(['foo', 'bar']).lookup('Foolish men play football in bar');"

@@ -6,11 +6,12 @@ Gem::Specification.new do |s|
   s.name = 'rahocorasick'
   s.version = '0.1.0'
   s.platform = Gem::Platform::RUBY
-  s.authors = ['IChou']
+  s.authors = ['iChou']
   s.email = ['zhouyi@jinshuju.net']
   s.homepage = 'https://github.com/jinshuju/rahocorasick'
-  s.summary = 'WIP'
-  s.description = 'WIP'
+  s.summary = 'A Ruby wraper for Rust [Aho-Corasick](https://github.com/BurntSushi/aho-corasick) algorithm'
+  s.description = 'It\'s a string searching gem that locates elements of a finite set of strings (the "dictionary") ' \
+                  'within an input text.'
   s.files = Dir['lib/**/*.rb', 'ext/**/*.{rs,toml,lock,rb}'] + %w[README.md Rakefile]
   s.require_paths = ['lib']
   s.license = 'MIT'

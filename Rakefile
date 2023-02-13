@@ -19,6 +19,11 @@ Rake::ExtensionTask.new('rahocorasick', spec) do |c|
   c.cross_platform = CROSS_PLATFORMS
 end
 
+Rake::TestTask.new do |t|
+  t.deps << :dev << :compile
+  t.test_files = FileList['test/**/*_test.rb']
+end
+
 task :dev do
   ENV['RB_SYS_CARGO_PROFILE'] = 'dev'
 end
