@@ -53,9 +53,9 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
 name = "clang-sys"
-version = "1.4.0"
+version = "1.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fa2e27ae6ab525c3d369ded447057bca5438d86dc3a68f6faafb8269ba82ebf3"
+checksum = "77ed9a53e5d4d9c573ae844bfac6872b159cb1d1585a83b29e7a64b7eef7332a"
 dependencies = [
  "glob",
  "libc",
@@ -174,22 +174,25 @@ dependencies = [
 
 [[package]]
 name = "rb-sys"
-version = "0.9.60"
+version = "0.9.65"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "128fe32bdc31f5788263d945d32ffd71855c22d0950a2946d0cce512640bcd58"
+checksum = "e8fe617bad8e88fd7e5d6f432e35f09e5f94144dfb8e8ee4adde82fb920dc59b"
 dependencies = [
  "rb-sys-build",
 ]
 
 [[package]]
 name = "rb-sys-build"
-version = "0.9.60"
+version = "0.9.65"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f3ab6ad065389873cf9ffbcab4d7d1ef3c7755b002b6bf79bf0374ce119a6977"
+checksum = "007e63597f91c711cbb299e60fecbdb6f5ad4a066d6a20c81943893f1584c895"
 dependencies = [
  "bindgen",
+ "lazy_static",
+ "quote",
  "regex",
  "shell-words",
+ "syn",
 ]
 
 [[package]]

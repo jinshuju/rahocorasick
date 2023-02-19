@@ -33,7 +33,7 @@ jobs:
         with:
           platform: ${{ matrix.ruby-platform }}
           directory: ./
-          ruby-versions: "3.2, 3.1" # optional
+          ruby-versions: "3.2, 3.1, 3.0, 2.7" # optional
           setup: bundle install
 
   build_source:
@@ -79,25 +79,25 @@ jobs:
         run: ls -R
         working-directory: pkg/
 
-      - name: Publish to RubyGem
-        env:
-          RUBYGEM_TOKEN: "${{secrets.RUBYGEM_TOKEN}}"
-        working-directory: pkg/
-        run: |
-          mkdir -p $HOME/.gem
-          touch $HOME/.gem/credentials
-          chmod 0600 $HOME/.gem/credentials
-          printf -- "---\n:rubygems_api_key: ${RUBYGEM_TOKEN}\n" > $HOME/.gem/credentials
-          for filename in ./**/*.gem; do
-            echo $filename
-            gem push $filename
-          done
-          for filename in *.gem; do
-            echo $filename
-            gem push $filename
-          done
-
-      - name: Install RubyGem & Test Run
-        run: |
-          gem install rahocorasick --verbose
-          ruby -rrahocorasick -e "puts RAhoC.new(['foo', 'bar']).lookup('Foolish men play football in bar');"
+#      - name: Publish to RubyGem
+#        env:
+#          RUBYGEM_TOKEN: "${{secrets.RUBYGEM_TOKEN}}"
+#        working-directory: pkg/
+#        run: |
+#          mkdir -p $HOME/.gem
+#          touch $HOME/.gem/credentials
+#          chmod 0600 $HOME/.gem/credentials
+#          printf -- "---\n:rubygems_api_key: ${RUBYGEM_TOKEN}\n" > $HOME/.gem/credentials
+#          for filename in ./**/*.gem; do
+#            echo $filename
+#            gem push $filename
+#          done
+#          for filename in *.gem; do
+#            echo $filename
+#            gem push $filename
+#          done
+#
+#      - name: Install RubyGem & Test Run
+#        run: |
+#          gem install rahocorasick --verbose
+#          ruby -rrahocorasick -e "puts RAhoC.new(['foo', 'bar']).lookup('Foolish men play football in bar');"
