@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rahocorasick (0.1.1)
+    rahocorasick (0.1.2)
       rb_sys (>= 0.9.54)
 
 GEM
@@ -53,4 +53,4 @@ DEPENDENCIES
   test-unit
 
 BUNDLED WITH
-   2.3.8
+   2.4.6
